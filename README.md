@@ -90,25 +90,31 @@ Several errors and issues were encountered during this project. Below are some s
 
 A frequent error that can occur is related to `USB-connection-timeout` or `USB-busy`. The first solution is to try running the `fix-atocube` option directly from a free terminal (no `python3` needed). Alternatively, unplugging and re-inserting the USB connection may solve the issue. If you are not near the Linux PC, the following code can be used to disconnect and reconnect the USB connection:
 
-```bash
+`
 # Disconnecting driver
+```bash
 echo -n "1-10.2.1.1" | sudo tee /sys/bus/usb/drivers/usb/unbind
 echo 0 | sudo tee /sys/bus/usb/devices/1-10.2.1.1/authorized
 lsusb | grep 16c0:055b
+```
 
 # Reconnecting driver
+```bash
 echo 1 | sudo tee /sys/bus/usb/devices/1-10.2.1.1/authorized
 echo -n "1-10.2.1.1" | sudo tee /sys/bus/usb/drivers/usb/bind
-```bash
-Finally, this can also occur if the piezo stage is being controlled from an open Python terminal somewhere. The piezo can be run using the terminal as follows:
+```
 
+
+Finally, this can also occur if the piezo stage is being controlled from an open Python terminal somewhere. The piezo can be run using the terminal as follows:
 ```bash
 directory$ python3
 >>> from pylablib.devices import Attocube
 >>> atc = Attocube.ANC350()
 >>> atc.move_to(0,0.003000)
 >>> exit()
-```bash
+```
+
+
 These lines should be run one after the other. It will first open a Python shell, initialize the piezo, and then move the x-axis to 3000 µm. Finally, once done, the shell can be closed using `exit()`.
 
 If the limit of the piezo stage is changing over time, the best solution is to check for loose connections at the cryostat or elsewhere. Additionally, try turning off the piezo controller for a few days (e.g., over the weekend).
